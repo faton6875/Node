@@ -3,8 +3,8 @@ const router = new express.Router();
 const Task = require('../models/task.js');
 const auth = require('../middleware/auth');
 
-router.post('/tasks', auth, (req, res) => {
-  const task = new Task({ ...req.body, owner: req.user._id });
+router.post('/tasks', (req, res) => {
+  const task = new Task({ ...req.body });
   task
     .save()
     .then(() => {
@@ -17,7 +17,7 @@ router.post('/tasks', auth, (req, res) => {
 
 router.get('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id;
-  debugger;
+
   try {
     const task = await Task.findOne({ _id, owner: req.user._id });
 

@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     name: { type: String },
     email: { type: String, unique: true, require: true },
     password: { type: String, require: true },
-
+    role: { type: String, require: true },
     tokens: [
       {
         token: {
