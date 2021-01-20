@@ -41,9 +41,20 @@ router.get('/users/me', auth, async (req, res) => {
 });
 
 router.get('/users', async (req, res) => {
+  res.set('Content-Range', 'users 0-24/319');
+  res.set('Access-Control-Expose-Headers', 'Content-Range');
   try {
     const users = await User.find({});
-    res.status(200).send(users);
+    const result = users.map((item) => {
+      return {
+        id: item._id,
+        name: item.name,
+        email: item.email,
+        role: item.role
+      };
+    });
+
+    res.status(200).send(result);
   } catch (error) {
     res.status(500).send();
   }
@@ -65,6 +76,7 @@ router.get('/users/:id', (req, res) => {
 
 router.post('/users', async (req, res) => {
   const user = new User(req.body);
+
   try {
     await user.save();
     const token = await user.generateAuthToken();
